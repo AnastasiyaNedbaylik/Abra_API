@@ -5,9 +5,14 @@ class RegisterResponse{
         'id': 'number'
     }
 
-    compare_models(model) {
+    negative_response = {
+        'detail': 'string'
+    }
+
+    compare_models(model, pos=true) {
+        let response = (pos) ? this.response : this.negative_response;
         for (let key of Object.keys(model)) {
-            if (typeof model[key] !== this.response[key]) return false;
+            if (typeof model[key] !== response[key]) return false;
         }
         return true;
     }

@@ -25,8 +25,10 @@ describe('register', () => {
                 'password': '1234456',
                 'confirm_password': '4321'
         }
-    }).then(({body}) => {
-        for (let key of Object.keys(body)) cy.log(key, body[key]);
+    }).then(response => {
+        expect(response['status']).to.equal(400);
+        // for (let key of Object.keys(body)) cy.log(key, body[key]);
+        expect(RegisterResponse.compare_models(response['body'], false)).to.equal(true);
         })
         cy.log('Generated email address:', randomEmail);
     })
