@@ -5,6 +5,6 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
-    baseUrl: 'http://34.141.58.52:8000/'
+    baseUrl: 'https://api.dev.abra-market.com/'//'http://34.141.58.52:8000/'
   },
 });
