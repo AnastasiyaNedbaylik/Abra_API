@@ -22,6 +22,10 @@ class RegisterResponse{
         ]
     }
 
+    negative_responce_existing_email = {
+        "detail": "string"
+      }
+
     compare_models(model, positive = true) {
         let response = positive ? this.response : this.negative_response;
         return compare_models(model, response);

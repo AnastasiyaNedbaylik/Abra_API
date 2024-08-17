@@ -59,4 +59,44 @@ describe('register suplier', () => {
             });
         });
     });
+
+    it('register with an already existing email', () => {
+        const randomEmail = generateRandomEmail();
+        cy.log('Generated email address:', randomEmail);
+        const randomPassword = generateRandomPassword();
+        cy.log('Generated password:', randomPassword);
+
+        // Первый запрос для создания пользователя с новым email
+        cy.request('POST', '/auth/sign-up/supplier', {
+            'email': randomEmail,
+            'password': randomPassword
+        }).then(response => {
+            cy.log('First registration response:', JSON.stringify(response));
+            expect(response.status).to.equal(200);
+            expect(RegisterResponse.compare_models(response['body'], true)).to.equal(true);
+    
+            // Добавление задержки перед повторным запросом, чтобы избежать ошибки
+            // 'Database error: could not serialize access due to read/write dependencies among transactions'
+            cy.wait(2000);
+
+            // Повторная попытка регистрации с тем же email
+            const existingEmail = randomEmail;
+            cy.log('Attempting to register again with the same email:', existingEmail);
+            const randomPassword = generateRandomPassword();
+            cy.log('Generated password:', randomPassword);
+            cy.request({
+                method: 'POST',
+                url: '/auth/sign-up/supplier',
+                failOnStatusCode: false,
+                body: {
+                    'email': existingEmail,
+                    'password': randomPassword
+                }
+            }).then(second_response => {
+                cy.log('Second registration response:', JSON.stringify(second_response));
+                expect(second_response.status).to.equal(409); 
+                expect(second_response.body).to.have.property('detail', 'Email is already registered');
+            });
+        });
+    });
 });
