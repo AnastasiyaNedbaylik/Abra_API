@@ -1,3 +1,5 @@
+import { compare_models } from '../utils/compare_models';
+
 class RegisterResponse{
         response = {
             "ok": true,
@@ -21,15 +23,14 @@ class RegisterResponse{
     }
 
     compare_models(model, positive = true) {
-        let response = (positive) ? this.response : this.negative_response;
-        for (let key of Object.keys(response)) {
-            if (typeof model[key] !== typeof response[key]) {
-                console.log(`Mismatch at key ${key}: expected ${typeof response[key]}, got ${typeof model[key]}`);
-                return false;
-            }
-        }
-        return true;
+        let response = positive ? this.response : this.negative_response;
+        return compare_models(model, response);
     }
+}
+
+module.exports = new RegisterResponse();
+
+module.exports = new RegisterResponse();
 
     // compare_models(model, positive = true) {
     //     let expectedModel = (positive) ? this.response : this.negative_response;
@@ -57,6 +58,3 @@ class RegisterResponse{
     
     //     return deepEqual(model, expectedModel);
     // }
-}
-
-module.exports = new RegisterResponse();

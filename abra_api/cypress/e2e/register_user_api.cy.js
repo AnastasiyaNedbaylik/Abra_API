@@ -43,7 +43,7 @@ describe('register suplier', () => {
         const randomPassword = generateRandomPassword();
         cy.log('Generated password:', randomPassword);
         cy.wrap(invalidEmails).each((email) => {
-            cy.log(`Testing with password: ${email}`);
+            cy.log(`Testing with email: ${email}`);
             cy.request({
                 method: 'POST',
                 url: '/auth/sign-up/supplier',

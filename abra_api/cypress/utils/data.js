@@ -39,7 +39,8 @@ export function generateRandomPassword() {
     '@missingusername.com',
     'username@.com',
     'username@domain..com',
-    'username@domain.com@extra'
+    'username@domain.com@extra',
+    ''
   ];
 
   // Список невалидных password
@@ -58,5 +59,6 @@ export function generateRandomPassword() {
     '12345678!#*+$',
       // Менее 8 символов
     'Pwd1!', 
-    'H1e!+'
+    'H1e!+',
+    ''
   ];
