@@ -1,18 +1,21 @@
-class RegisterResponse2{
-    response = {
-        "ok": "boolean",
-        "result": "boolean",
-        "detail": {
-            "message": "string"
+class RegisterResponse{
+        response = {
+            "ok": true,
+            "result": true,
+            "detail": {
+                "message": "string"
+            }
         }
-    }
 
     negative_response = {
         "detail": [
             {
-                "loc": "array",
+                "loc": [], // Массив
                 "msg": "string",
-                "type": "string"
+                "type": "string",
+                "ctx": {
+                     "pattern": "string"
+                }
             }
         ]
     }
@@ -56,4 +59,4 @@ class RegisterResponse2{
     // }
 }
 
-module.exports = new RegisterResponse2();
+module.exports = new RegisterResponse();

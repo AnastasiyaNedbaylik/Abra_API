@@ -1,5 +1,5 @@
 import { generateRandomEmail, generateRandomPassword } from '../utils/data';
-import RegisterResponse2 from '../models/api_models_abra';
+import RegisterResponse from '../models/api_models_abra';
 
 describe('register suplier', () => {
     it('positive', () => {
@@ -11,10 +11,10 @@ describe('register suplier', () => {
             'email': randomEmail,
             'password': randomPassword
         }).then(response => {
-            // cy.log(JSON.stringify(response)) 
+            cy.log(JSON.stringify(response));
             expect(response['status']).to.equal(200);
-            expect(RegisterResponse2.compare_models(response['body'], true)).to.equal(true);
-        })
+            expect(RegisterResponse.compare_models(response['body'], true)).to.equal(true);
+        });
     })
 
     it('wrong password', () => {
@@ -29,10 +29,10 @@ describe('register suplier', () => {
                 'password': 'qwerty'
         }
     }).then(response => {
-        cy.log(JSON.stringify(response)) // Вывод полного объекта response в логи
+        cy.log(JSON.stringify(response)); // Вывод полного объекта response в логи
         expect(response['status']).to.equal(422);
         // for (let key of Object.keys(body)) cy.log(key, body[key]);
-        // expect(RegisterResponse2.compare_models(response['body'], false)).to.equal(true);
+        expect(RegisterResponse.compare_models(response['body'], false)).to.equal(true);
         })
     })
 })
