@@ -1,8 +1,9 @@
 import { generateRandomEmail, generateRandomPassword } from '../utils/data';
 import RegisterResponse from '../models/api_models_abra';
+import { invalidEmails, invalidPasswords } from '../utils/data';
 
 describe('register suplier', () => {
-    it('positive', () => {
+    it('positive (valid email and password)', () => {
         const randomEmail = generateRandomEmail();
         cy.log('Generated email address:', randomEmail);
         const randomPassword = generateRandomPassword();
@@ -17,22 +18,24 @@ describe('register suplier', () => {
         });
     })
 
-    it('wrong password', () => {
+    it('invalid password', () => {
         const randomEmail = generateRandomEmail();
         cy.log('Generated email address:', randomEmail);
-        cy.request({
-            method: 'POST',
-            url: '/auth/sign-up/supplier', 
-            failOnStatusCode: false,
-            body: {
-                'email': randomEmail,
-                'password': 'qwerty'
-        }
-    }).then(response => {
-        cy.log(JSON.stringify(response)); // Вывод полного объекта response в логи
-        expect(response['status']).to.equal(422);
-        // for (let key of Object.keys(body)) cy.log(key, body[key]);
-        expect(RegisterResponse.compare_models(response['body'], false)).to.equal(true);
-        })
-    })
-})
+        cy.wrap(invalidPasswords).each((password) => {
+            cy.log(`Testing with password: ${password}`);
+            cy.request({
+                method: 'POST',
+                url: '/auth/sign-up/supplier',
+                failOnStatusCode: false,
+                body: {
+                    'email': randomEmail,
+                    'password': password
+                }
+            }).then(response => {
+                cy.log(JSON.stringify(response));
+                expect(response.status).to.equal(422);
+                expect(RegisterResponse.compare_models(response.body, false)).to.equal(true);
+            });
+        });
+    });
+});

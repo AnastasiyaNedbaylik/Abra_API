@@ -7,7 +7,8 @@ export function generateRandomEmail() {
     return `${randomString}@example.com`;
   };
 
-    /**
+
+  /**
  * Случайный пароль, соответствующий заданным требованиям.
  * @returns {string} Случайный пароль.
  */
@@ -15,7 +16,7 @@ export function generateRandomPassword() {
     const lowerCase = 'abcdefghijklmnopqrstuvwxyz';
     const upperCase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const numbers = '0123456789';
-    const specialChars = '!#*+$'; //Remove symbol '/'s
+    const specialChars = '!#*+$'; //Удалили символ '/'
   
     const allChars = lowerCase + upperCase + numbers + specialChars;
   
@@ -31,3 +32,31 @@ export function generateRandomPassword() {
   
     return password.split('').sort(() => 0.5 - Math.random()).join(''); // Перемешиваем символы для случайного порядка
   };
+
+  // Список невалидных emails
+  export const invalidEmails = [
+    'plainaddress',
+    '@missingusername.com',
+    'username@.com',
+    'username@domain..com',
+    'username@domain.com@extra'
+  ];
+
+  // Список невалидных password
+  export const invalidPasswords = [
+    'onlylowercaseletters',
+    'ONLYUPPERCASELETTERS',
+    'OnlyLetters',
+    '12345678',
+    'lettersand123',
+    'LETTERS123',
+    'LettersAnd123',
+    '!#*+$!#*+$',
+    'lettersand!#*+$',
+    'LETTERS!#*+$',
+    'Lettersand!#*+$',
+    '12345678!#*+$',
+      // Менее 8 символов
+    'Pwd1!', 
+    'H1e!+'
+  ];
