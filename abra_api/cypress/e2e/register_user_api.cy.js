@@ -38,4 +38,25 @@ describe('register suplier', () => {
             });
         });
     });
+
+    it('invalid email', () => {
+        const randomPassword = generateRandomPassword();
+        cy.log('Generated password:', randomPassword);
+        cy.wrap(invalidEmails).each((email) => {
+            cy.log(`Testing with password: ${email}`);
+            cy.request({
+                method: 'POST',
+                url: '/auth/sign-up/supplier',
+                failOnStatusCode: false,
+                body: {
+                    'email': email,
+                    'password': randomPassword
+                }
+            }).then(response => {
+                cy.log(JSON.stringify(response));
+                expect(response.status).to.equal(422);
+                expect(RegisterResponse.compare_models(response.body, false)).to.equal(true);
+            });
+        });
+    });
 });
