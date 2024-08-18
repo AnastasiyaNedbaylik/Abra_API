@@ -11,24 +11,17 @@ import { registerAndLoginUser } from '../utils/login';
 
 describe('Set up account', () => {
     beforeEach(() => {
-        registerAndLoginUser().then(() => {
-            // Выполняем действия после успешной регистрации и входа
-            // Нет необходимости в cy.reload() для API тестов
-        });
+        registerAndLoginUser();
     });
 
     it('set up account', () => {
-        // Генерация случайных данных для запроса
         const firstName = generateRandomFirstName();
+        cy.log(`Generated first name: ${firstName}`);
         const lastName = generateRandomLastName();
+        cy.log(`Generated last name: ${lastName}`);
         const phoneNumber = generateRandomPhoneNumber();
+        cy.log(`Generated phone number: ${phoneNumber}`);
 
-        // Логирование сгенерированных данных
-        cy.log('Generated first name:', firstName);
-        cy.log('Generated last name:', lastName);
-        cy.log('Generated phone number:', phoneNumber);
-
-        // Отправка запроса с использованием сгенерированных данных
         cy.request({
             method: 'POST',
             url: '/auth/sign-up/account/sendInfo',
@@ -39,7 +32,6 @@ describe('Set up account', () => {
                 phone_number: phoneNumber
             }
         }).then((response) => {
-            // Проверка успешного ответа
             expect(response.status).to.equal(200);
         });
     });

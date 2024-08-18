@@ -31,10 +31,13 @@ export function confirmEmailRegistration(emailAddress) {
                 }).then((confirmationResponse) => {
                     cy.log(JSON.stringify(confirmationResponse));
                     expect(confirmationResponse.status).to.equal(200);
-                    expect(СonfirmationResponse.compare_models(confirmationResponse['body'], true)).to.equal(true);
+                    
+                    // Выполнение проверки модели
+                    cy.wrap(СonfirmationResponse.compare_models(confirmationResponse.body, true))
+                      .should('equal', true);
                     
                     // Возвращаем пароль для последующего использования
-                    return cy.wrap(randomPassword); // Возвращаем пароль как Cypress объект
+                    return cy.wrap(randomPassword); // Возвращаем пароль как Cypress объект 
                 });
             });
         });
