@@ -32,7 +32,7 @@ describe('Login', () => {
 
     it('login with invalid email', () => {
         const randomPassword = generateRandomPassword();
-        cy.log('Generated password:', randomPassword);
+        cy.log(`Generated password: ${randomPassword}`);
         cy.wrap(invalidEmails).each((email) => {
             cy.log(`Testing with email: ${email}`);
             cy.request({
@@ -54,7 +54,7 @@ describe('Login', () => {
 
     it('login with invalid password', () => {
         const randomEmail = generateRandomEmail();
-        cy.log('Generated email address:', randomEmail);
+        cy.log(`Generated email address: ${randomEmail}`);
         cy.wrap(invalidPasswords).each((password) => {
             cy.log(`Testing with password: ${password}`);
             cy.request({
@@ -99,16 +99,16 @@ describe('Login', () => {
 
     it('login with registred but not confirmed email', () => {
         const randomEmail = generateRandomEmail();
-        cy.log('Generated email address:', randomEmail);
+        cy.log(`Generated email address: ${randomEmail}`);
         const randomPassword = generateRandomPassword();
-        cy.log('Generated password:', randomPassword);
+        cy.log(`Generated password: ${randomPassword}`);
 
         // Первый запрос для регистрации
         cy.request('POST', '/auth/sign-up/supplier', {
             'email': randomEmail,
             'password': randomPassword
         }).then(response => {
-            cy.log('First registration response:', JSON.stringify(response));
+            cy.log(`First registration response: ${JSON.stringify(response)}`);
             expect(response.status).to.equal(200);
             expect(RegisterResponse.compare_models(response['body'], true)).to.equal(true);
     
@@ -118,9 +118,9 @@ describe('Login', () => {
 
             //Попытка логина с тем же email и password
             const existingEmail = randomEmail;
-            cy.log('Attempting to login with the same email:', existingEmail);
+            cy.log(`Attempting to login with the same email: ${existingEmail}`);
             const existingPassword = randomPassword;
-            cy.log('Attempting to login with the same password:', existingPassword)
+            cy.log(`Attempting to login with the same password: ${existingPassword}`)
             cy.request({
                 method: 'POST',
                 url: '/auth/sign-in',
@@ -130,7 +130,7 @@ describe('Login', () => {
                     'password': existingPassword
                 }
             }).then(loginResponse => {
-                cy.log('Second registration response:', JSON.stringify(loginResponse));
+                cy.log(`Second registration response: ${JSON.stringify(loginResponse)}`);
                 expect(loginResponse.status).to.equal(403);
                 expect(loginResponse.headers).to.have.property('content-type', 'application/json');
                 expect(loginResponse.body).to.have.property('detail', 'Wrong email or password, maybe email was not confirmed or account was deleted?');

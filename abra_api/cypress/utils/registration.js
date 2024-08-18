@@ -3,7 +3,7 @@ import СonfirmationResponse from '../models/api_models_abra';
 
 export function confirmEmailRegistration(emailAddress) {
     const randomPassword = generateRandomPassword();
-    cy.log(`Сгенерированный пароль: ${randomPassword}`);
+    cy.log(`Generated password: ${randomPassword}`);
 
     // Шаг 1: Зарегистрировать пользователя
     return cy.request('POST', '/auth/sign-up/supplier', {
@@ -16,12 +16,12 @@ export function confirmEmailRegistration(emailAddress) {
         return cy.task('waitForEmail', { emailAddress }).then((emailDetails) => {
             // Шаг 3: Извлечь ссылку на подтверждение из email
             return cy.task('parseRegistrationLink', emailDetails).then((confirmationLink) => {
-                cy.log(`Ссылка для подтверждения: ${confirmationLink}`);
+                cy.log(`Сonfirmation Link: ${confirmationLink}`);
 
                 // Шаг 4: Извлечь токен из ссылки
                 const url = new URL(confirmationLink);
                 const token = url.searchParams.get('token');
-                cy.log(`Извлеченный токен: ${token}`);
+                cy.log(`Token: ${token}`);
 
                 // Шаг 5: Отправить GET запрос на подтверждение email с токеном
                 return cy.request({

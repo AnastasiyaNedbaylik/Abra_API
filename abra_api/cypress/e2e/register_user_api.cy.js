@@ -8,9 +8,9 @@ describe('Register Suplier', () => {
 
     it('positive (valid email and password)', () => {
         const randomEmail = generateRandomEmail();
-        cy.log('Generated email address:', randomEmail);
+        cy.log(`Generated email address: ${randomEmail}`);
         const randomPassword = generateRandomPassword();
-        cy.log('Generated password:', randomPassword);
+        cy.log(`Generated password: ${randomPassword}`);
         cy.request('POST', '/auth/sign-up/supplier' , {
             'email': randomEmail,
             'password': randomPassword
@@ -23,7 +23,7 @@ describe('Register Suplier', () => {
 
     it('invalid password', () => {
         const randomEmail = generateRandomEmail();
-        cy.log('Generated email address:', randomEmail);
+        cy.log(`Generated email address: ${randomEmail}`);
         cy.wrap(invalidPasswords).each((password) => {
             cy.log(`Testing with password: ${password}`);
             cy.request({
@@ -44,7 +44,7 @@ describe('Register Suplier', () => {
 
     it('invalid email', () => {
         const randomPassword = generateRandomPassword();
-        cy.log('Generated password:', randomPassword);
+        cy.log(`Generated password: ${randomPassword}`);
         cy.wrap(invalidEmails).each((email) => {
             cy.log(`Testing with email: ${email}`);
             cy.request({
@@ -65,16 +65,16 @@ describe('Register Suplier', () => {
 
     it('register with an already existing email', () => {
         const randomEmail = generateRandomEmail();
-        cy.log('Generated email address:', randomEmail);
+        cy.log(`Generated email address: ${randomEmail}`);
         const randomPassword = generateRandomPassword();
-        cy.log('Generated password:', randomPassword);
+        cy.log(`Generated password: ${randomPassword}`);
 
         // Первый запрос для создания пользователя с новым email
         cy.request('POST', '/auth/sign-up/supplier', {
             'email': randomEmail,
             'password': randomPassword
         }).then(response => {
-            cy.log('First registration response:', JSON.stringify(response));
+            cy.log(`First registration response:' ${JSON.stringify(response)}`);
             expect(response.status).to.equal(200);
             expect(RegisterResponse.compare_models(response['body'], true)).to.equal(true);
     
@@ -84,9 +84,9 @@ describe('Register Suplier', () => {
 
             // Повторная попытка регистрации с тем же email
             const existingEmail = randomEmail;
-            cy.log('Attempting to register again with the same email:', existingEmail);
+            cy.log(`Attempting to register again with the same email: ${existingEmail}`);
             const randomPassword = generateRandomPassword();
-            cy.log('Generated password:', randomPassword);
+            cy.log(`Generated password: ${randomPassword}`);
             cy.request({
                 method: 'POST',
                 url: '/auth/sign-up/supplier',
@@ -96,7 +96,7 @@ describe('Register Suplier', () => {
                     'password': randomPassword
                 }
             }).then(second_response => {
-                cy.log('Second registration response:', JSON.stringify(second_response));
+                cy.log(`Second registration response:' ${JSON.stringify(second_response)}`);
                 expect(second_response.status).to.equal(409); 
                 expect(second_response.body).to.have.property('detail', 'Email is already registered');
             });
