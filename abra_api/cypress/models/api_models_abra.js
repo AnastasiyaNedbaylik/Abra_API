@@ -57,10 +57,7 @@ module.exports = new RegisterResponse();
 class СonfirmationResponse{
     response = {
         "ok": true,
-        "result": true,
-        "detail": {
-            "message": "string"
-        }
+        "result": true
     }
 
     negative_response = {

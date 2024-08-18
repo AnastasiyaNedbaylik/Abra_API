@@ -19,7 +19,7 @@ describe('Register Suplier', () => {
             expect(response['status']).to.equal(200);
             expect(RegisterResponse.compare_models(response['body'], true)).to.equal(true);
         });
-    })
+    });
 
     it('invalid password', () => {
         const randomEmail = generateRandomEmail();
@@ -136,15 +136,33 @@ describe('Email Confirmation', () => {
                         cy.request({
                             method: 'GET',
                             url: '/auth/sign-up/confirmEmail',
-                            qs: { token }, // Передаем токен в параметре query
+                            qs: { token }, // Передаем токен в параметре query 
+                            // Параметр qs в cy.request() используется для указания query string (строки запроса),
+                            // то есть параметров, которые добавляются в URL после знака вопроса ?. qs принимает объект, 
+                            //где ключи — это названия параметров, а значения — это значения параметров. qs: { token: 'vefrfrf' // передача параметра token }
                             // failOnStatusCode: false 
                         }).then((confirmationResponse) => {
+                            cy.log(JSON.stringify(confirmationResponse));
                             expect(confirmationResponse.status).to.equal(200);
-                            expect(СonfirmationResponse.compare_models(response['body'], true)).to.equal(true);
+                            expect(СonfirmationResponse.compare_models(confirmationResponse['body'], true)).to.equal(true);
                         });
                     });
                 });
             });
         });
     });
+
+    it('negative confirm egistration without token', () => {
+        cy.request({
+            method: 'GET',
+            url: '/auth/sign-up/confirmEmail',
+            qs: '', // missing token
+            failOnStatusCode: false 
+        }).then((confirmationResponse) => {
+            cy.log(JSON.stringify(confirmationResponse));
+            expect(confirmationResponse.status).to.equal(422);
+            expect(СonfirmationResponse.compare_models(confirmationResponse['body'], false)).to.equal(true);
+            // expect(confirmationResponse.body).to.have.property('detail', 'Invalid token');
+        });
+    })
 });
