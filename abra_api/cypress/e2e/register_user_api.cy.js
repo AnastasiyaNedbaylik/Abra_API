@@ -152,7 +152,7 @@ describe('Email Confirmation', () => {
         });
     });
 
-    it('negative confirm egistration without token', () => {
+    it('negative confirm registration without token', () => {
         cy.request({
             method: 'GET',
             url: '/auth/sign-up/confirmEmail',
@@ -163,6 +163,21 @@ describe('Email Confirmation', () => {
             expect(confirmationResponse.status).to.equal(422);
             expect(СonfirmationResponse.compare_models(confirmationResponse['body'], false)).to.equal(true);
             // expect(confirmationResponse.body).to.have.property('detail', 'Invalid token');
+        });
+    })
+
+    it('negative confirm registration with invalid token', () => {
+        cy.request({
+            method: 'GET',
+            url: '/auth/sign-up/confirmEmail',
+            qs: {
+                token: 'qwerty' // invalid token
+            },
+            failOnStatusCode: false 
+        }).then((confirmationResponse) => {
+            cy.log(JSON.stringify(confirmationResponse));
+            expect(confirmationResponse.status).to.equal(403);
+            expect(confirmationResponse.body).to.have.property('detail', 'Invalid token');
         });
     })
 });
