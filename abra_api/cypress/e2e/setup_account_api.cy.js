@@ -1,5 +1,5 @@
 import LoginResponse from '../models/api_models_abra';
-import RegisterResponse from '../models/api_models_abra';
+import SetUpAccountResponse from '../models/api_models_abra';
 import { generateRandomFirstName, 
     generateRandomLastName, 
     generateRandomPhoneNumber, 
@@ -33,6 +33,8 @@ describe('Set up account', () => {
             }
         }).then((response) => {
             expect(response.status).to.equal(200);
+            expect(SetUpAccountResponse.compare_models(response['body'], true)).to.equal(true);
+
         });
     });
 });

@@ -108,3 +108,31 @@ class LoginResponse{
 }
 
 module.exports = new LoginResponse();
+
+
+class SetUpAccountResponse{
+    response = {
+        "ok":true,
+        "result":true
+    }
+
+    negative_response = {
+        "detail": [
+            {
+                "loc": [], // Массив
+                "msg": "string",
+                "type": "string",
+                "ctx": {
+                    "pattern": "string"
+                }
+            }
+     ]
+    }   
+
+    compare_models(model, positive = true) {
+        let response = positive ? this.response : this.negative_response;
+        return compare_models(model, response);
+    }
+}
+
+module.exports = new SetUpAccountResponse();
