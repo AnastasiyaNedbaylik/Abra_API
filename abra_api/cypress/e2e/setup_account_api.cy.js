@@ -5,7 +5,7 @@ import { generateRandomFirstName,
     generateRandomPhoneNumber, 
     generateRandomNineDigitNumber, 
     generateRandomYear, generateRandomAboutBusinessText, 
-    generateRandomEmail, generateRandomAddress } from '../utils/data';
+    generateRandomEmail, generateRandomAddress, long_value } from '../utils/data';
 import { confirmEmailRegistration } from '../utils/registration';
 import { registerAndLoginUser } from '../utils/login';
 
@@ -36,6 +36,28 @@ describe('Set up account', () => {
             expect(response.status).to.equal(200);
             expect(SetUpAccountResponse.compare_models(response['body'], true)).to.equal(true);
 
+        });
+    });
+
+    it('set up account negative (max+1 value for first name)', () => {
+        const lastName = generateRandomLastName();
+        cy.log(`Generated last name: ${lastName}`);
+        const phoneNumber = generateRandomPhoneNumber();
+        cy.log(`Generated phone number: ${phoneNumber}`);
+
+        cy.request({
+            method: 'POST',
+            url: '/auth/sign-up/account/sendInfo',
+            failOnStatusCode: false,
+            body: {
+                first_name: long_value,
+                last_name: lastName,
+                country_id: 2,
+                phone_number: phoneNumber
+            }
+        }).then((response) => {
+            cy.log(JSON.stringify(response));
+            expect(response.status).to.equal(409);
         });
     });
 
@@ -133,4 +155,6 @@ describe('Set up account', () => {
             expect(SetUpAccountResponse.compare_models(response['body'], false)).to.equal(true);
         });
     });
+
+
 });

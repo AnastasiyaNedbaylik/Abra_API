@@ -187,3 +187,5 @@ export function generateRandomAddress() {
   // Формирование случайного адреса
   return `${streetNumber} ${streetName}, ${city}, ${state} ${zipCode}`;
 };
+
+export const long_value = 'Lorem ipsum dolor sit amet, c labore et dolore vhjg'; // max+1 = 51 symbol
