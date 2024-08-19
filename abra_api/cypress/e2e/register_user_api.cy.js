@@ -162,7 +162,6 @@ describe('Email Confirmation', () => {
             cy.log(JSON.stringify(confirmationResponse));
             expect(confirmationResponse.status).to.equal(422);
             expect(СonfirmationResponse.compare_models(confirmationResponse['body'], false)).to.equal(true);
-            // expect(confirmationResponse.body).to.have.property('detail', 'Invalid token');
         });
     })
 

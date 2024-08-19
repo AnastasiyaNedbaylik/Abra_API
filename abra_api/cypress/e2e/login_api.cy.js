@@ -62,8 +62,28 @@ describe('Login', () => {
                 url: '/auth/sign-in',
                 failOnStatusCode: false,
                 body: {
-                    'email': password,
-                    'password': randomEmail
+                    'email': randomEmail,
+                    'password': password
+                }
+            }).then(loginResponse => {
+                cy.log(JSON.stringify(loginResponse));
+                expect(loginResponse.status).to.equal(403);
+                expect(loginResponse.headers).to.have.property('content-type', 'application/json');
+                expect(loginResponse.body).to.have.property('detail', 'Wrong email or password, maybe email was not confirmed or account was deleted?');
+            });
+        });
+    });
+
+    it('login with empty password', () => {
+        const randomEmail = generateRandomEmail();
+        cy.log(`Generated email address: ${randomEmail}`);
+            cy.request({
+                method: 'POST',
+                url: '/auth/sign-in',
+                failOnStatusCode: false,
+                body: {
+                    'email': randomEmail,
+                    'password': ''
                 }
             }).then(loginResponse => {
                 cy.log(JSON.stringify(loginResponse));
@@ -71,7 +91,6 @@ describe('Login', () => {
                 expect(loginResponse.headers).to.have.property('content-type', 'application/json');
                 expect(LoginResponse.compare_models(loginResponse.body, false)).to.equal(true);
             });
-        });
     });
 
     it('login with registred email and incorrect password', () => {
