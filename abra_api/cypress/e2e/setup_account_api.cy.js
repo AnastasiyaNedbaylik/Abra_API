@@ -133,6 +133,31 @@ describe('Set up account', () => {
         });
     });
 
+    it('set up account negative (incorrect country id)', () => {
+        const firstName = generateRandomFirstName();
+        cy.log(`Generated first name: ${firstName}`);
+        const lastName = generateRandomLastName();
+        cy.log(`Generated last name: ${lastName}`);
+        const phoneNumber = generateRandomPhoneNumber();
+        cy.log(`Generated phone number: ${phoneNumber}`);
+
+        cy.request({
+            method: 'POST',
+            url: '/auth/sign-up/account/sendInfo',
+            failOnStatusCode: false,
+            body: {
+                first_name: firstName,
+                last_name: lastName,
+                country_id: 'test',
+                phone_number: phoneNumber
+            }
+        }).then((response) => {
+            cy.log(JSON.stringify(response));
+            expect(response.status).to.equal(422);
+            expect(SetUpAccountResponse.compare_models(response['body'], false)).to.equal(true);
+        });
+    });
+
     it('set up account negative (empty phone)', () => {
         const firstName = generateRandomFirstName();
         cy.log(`Generated first name: ${firstName}`);
@@ -156,5 +181,27 @@ describe('Set up account', () => {
         });
     });
 
+    it('set up account negative (incorrect phone)', () => {
+        const firstName = generateRandomFirstName();
+        cy.log(`Generated first name: ${firstName}`);
+        const lastName = generateRandomLastName();
+        cy.log(`Generated last name: ${lastName}`);
+
+        cy.request({
+            method: 'POST',
+            url: '/auth/sign-up/account/sendInfo',
+            failOnStatusCode: false,
+            body: {
+                first_name: firstName,
+                last_name: lastName,
+                country_id: 2,
+                phone_number: 'test'
+            }
+        }).then((response) => {
+            cy.log(JSON.stringify(response));
+            expect(response.status).to.equal(422);
+            expect(SetUpAccountResponse.compare_models(response['body'], false)).to.equal(true);
+        });
+    });
 
 });
