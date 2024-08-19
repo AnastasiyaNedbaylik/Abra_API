@@ -32,9 +32,105 @@ describe('Set up account', () => {
                 phone_number: phoneNumber
             }
         }).then((response) => {
+            cy.log(JSON.stringify(response));
             expect(response.status).to.equal(200);
             expect(SetUpAccountResponse.compare_models(response['body'], true)).to.equal(true);
 
+        });
+    });
+
+    it('set up account negative (empty first name)', () => {
+        const lastName = generateRandomLastName();
+        cy.log(`Generated last name: ${lastName}`);
+        const phoneNumber = generateRandomPhoneNumber();
+        cy.log(`Generated phone number: ${phoneNumber}`);
+
+        cy.request({
+            method: 'POST',
+            url: '/auth/sign-up/account/sendInfo',
+            failOnStatusCode: false,
+            body: {
+                first_name: '',
+                last_name: lastName,
+                country_id: 2,
+                phone_number: phoneNumber
+            }
+        }).then((response) => {
+            cy.log(JSON.stringify(response));
+            expect(response.status).to.equal(422);
+            expect(SetUpAccountResponse.compare_models(response['body'], false)).to.equal(true);
+
+        });
+    });
+
+    it('set up account negative (empty last name)', () => {
+        const firstName = generateRandomFirstName();
+        cy.log(`Generated first name: ${firstName}`);
+        const phoneNumber = generateRandomPhoneNumber();
+        cy.log(`Generated phone number: ${phoneNumber}`);
+
+        cy.request({
+            method: 'POST',
+            url: '/auth/sign-up/account/sendInfo',
+            failOnStatusCode: false,
+            body: {
+                first_name: firstName,
+                last_name: '',
+                country_id: 2,
+                phone_number: phoneNumber
+            }
+        }).then((response) => {
+            cy.log(JSON.stringify(response));
+            expect(response.status).to.equal(422);
+            expect(SetUpAccountResponse.compare_models(response['body'], false)).to.equal(true);
+        });
+    });
+
+    it('set up account negative (empty country id)', () => {
+        const firstName = generateRandomFirstName();
+        cy.log(`Generated first name: ${firstName}`);
+        const lastName = generateRandomLastName();
+        cy.log(`Generated last name: ${lastName}`);
+        const phoneNumber = generateRandomPhoneNumber();
+        cy.log(`Generated phone number: ${phoneNumber}`);
+
+        cy.request({
+            method: 'POST',
+            url: '/auth/sign-up/account/sendInfo',
+            failOnStatusCode: false,
+            body: {
+                first_name: firstName,
+                last_name: lastName,
+                country_id: '',
+                phone_number: phoneNumber
+            }
+        }).then((response) => {
+            cy.log(JSON.stringify(response));
+            expect(response.status).to.equal(422);
+            expect(SetUpAccountResponse.compare_models(response['body'], false)).to.equal(true);
+        });
+    });
+
+    it('set up account negative (empty phone)', () => {
+        const firstName = generateRandomFirstName();
+        cy.log(`Generated first name: ${firstName}`);
+        const lastName = generateRandomLastName();
+        cy.log(`Generated last name: ${lastName}`);
+
+        cy.request({
+            method: 'POST',
+            url: '/auth/sign-up/account/sendInfo',
+            failOnStatusCode: false,
+            body: {
+                first_name: firstName,
+                last_name: lastName,
+                country_id: 2,
+                phone_number: ''
+            }
+        }).then((response) => {
+            cy.log(JSON.stringify(response));
+            expect(response.status).to.equal(422);
+            expect(SetUpAccountResponse.compare_models(response['body'], false)).to.equal(true);
         });
     });
 });
